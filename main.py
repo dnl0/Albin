@@ -1,37 +1,46 @@
 import chess
 import discord
 from discord.ext import commands
+
 from config import TOKEN
 
-isBoard = True 
-board = chess.Board()
+isBoard = False
 
-client = discord.Client()
 bot = commands.Bot(command_prefix='&')
-
-@client.event
-async def on_ready():
-    print("Logged in as {0.user}".format(client))
 
 @bot.command()
 async def start(ctx):
+    global board
+    global isBoard # using global variables is probably not 
+                   # a good idea but what i have to say is
+
+    isBoard = True 
+    board = chess.Board()
+
     await ctx.channel.send("Board was created.")
 
-@bot.command()
+
+@bot.command(pass_context=True)
 async def move(ctx, arg):
+    global isBoard
+
     if isBoard: 
         try:
             board.push_san(arg)
         except ValueError:
             await ctx.channel.send("Invalid move.")
-            return
     else:
         await ctx.channel.send("Board wasn't created. Use &start to create.")
-        return
+
 
 @bot.command()
-async def print(ctx):
+async def end(ctx):
+    global board
+
     await ctx.channel.send("```" + str(board) + "```")
+    await ctx.channel.send("Game ended. Board is cleared.")
+    
+    board = chess.Board()
 
 
 bot.run(TOKEN)

@@ -27,6 +27,20 @@ async def move(ctx, arg):
     if isBoard: 
         try:
             board.push_san(arg)
+
+            if board.is_checkmate():
+                await ctx.channel.send("Checkmate")
+            elif board.is_stalemate():
+                await ctx.channel.send("Stalemate")
+            elif board.is_insufficient_material():
+                await ctx.channel.send("Insufficient material")
+            elif board.is_repetition():
+                await ctx.channel.send("Repetition of moves")
+            else:
+                return
+            
+            await end(ctx)
+            
         except ValueError:
             await ctx.channel.send("Invalid move.")
     else:

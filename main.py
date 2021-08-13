@@ -46,7 +46,7 @@ async def end(ctx):
     global board
 
     await ctx.channel.send("```" + str(board) + "```")
-    await ctx.channel.send("Game ended. Board is cleared.")
+    await ctx.channel.send("Game ended. Board is reset.")
     
     board.reset()
 

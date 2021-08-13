@@ -34,6 +34,8 @@ async def move(ctx, arg):
 
             elif board.is_check():
                 await ctx.channel.send("Check.")
+            else:
+                await ctx.message.add_reaction("✅")
 
         except ValueError:
             await ctx.channel.send("Invalid move.")

@@ -20,7 +20,7 @@ async def start(ctx):
     await ctx.channel.send("Board was created.")
 
 
-@bot.command(pass_context=True)
+@bot.command()
 async def move(ctx, arg):
     global isBoard
 
@@ -28,26 +28,13 @@ async def move(ctx, arg):
         try:
             board.push_san(arg)
 
-            # game ends
-            if board.is_checkmate():
-                await ctx.channel.send("Checkmate.")
-            elif board.is_stalemate():
-                await ctx.channel.send("Stalemate.")
-            elif board.is_insufficient_material():
-                await ctx.channel.send("Insufficient material.")
-            elif board.is_repetition():
-                await ctx.channel.send("Repetition of moves.")
+            if board.is_game_over():
+                await ctx.channel.send(board.outcome(claim_draw=True))
+                await end(ctx)
 
-            # other cases
             elif board.is_check():
                 await ctx.channel.send("Check.")
-                return
 
-            else:
-                return
-            
-            await end(ctx)
-            
         except ValueError:
             await ctx.channel.send("Invalid move.")
     else:
@@ -61,7 +48,7 @@ async def end(ctx):
     await ctx.channel.send("```" + str(board) + "```")
     await ctx.channel.send("Game ended. Board is cleared.")
     
-    board = chess.Board()
+    board.reset()
 
 
 bot.run(TOKEN)

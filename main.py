@@ -10,24 +10,47 @@ isBoard = False
 game = []
 
 @bot.command()
-async def start(ctx):
+async def start(ctx, user: discord.Member = None):
     global board
-    global isBoard # using global variables is probably not 
-                   # a good idea but what i have to say is
+    global isBoard
+    global white_id
+    global black_id
+
+    if not user:
+        await ctx.channel.send("Tag a user to play.")
+        return
+
+    white_id = ctx.author.id
+    black_id = user.id
 
     isBoard = True 
     board = chess.Board()
+    msg = f"White: {ctx.message.author.mention}\nBlack: {user.mention}"
 
     await ctx.channel.send("Board was created.")
+    await ctx.channel.send(msg)
+
+@start.error
+async def start_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.channel.send("User not found.")
 
 
 @bot.command()
 async def move(ctx, arg):
-    global isBoard
-    global game
-
     if isBoard: 
         try:
+            author_id = ctx.author.id
+
+            if board.turn and author_id == white_id: # board.turn returns True if 
+                                                     # white to move and false otherwise
+                pass
+            elif not board.turn and author_id == black_id:
+                pass
+            else:
+                await ctx.channel.send("You can't move for other player.")
+                return
+
             board.push_san(arg)
 
         except ValueError:
@@ -51,8 +74,6 @@ async def move(ctx, arg):
 
 @bot.command()
 async def log(ctx):
-    global game
-
     if len(game) == 0:
         await ctx.channel.send("No piece was moved yet.")
         return

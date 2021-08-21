@@ -86,11 +86,12 @@ async def move(ctx, arg):
                     await ctx.channel.send("Engine resigned; Congratulations!")
                     await end(ctx)
                     return
+
                 elif move.draw_offered:
                     await ctx.channel.send("Engine offered you a draw, do you accept? (This isn't implemented yet :/)")
-                    ctx.channel.
                     await end(ctx)
                     return
+
             move_normal_notation = board.san(move.move)
             await ctx.channel.send(move_normal_notation)
             board.push(move.move)

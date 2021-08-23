@@ -131,12 +131,14 @@ async def log(ctx):
 async def end(ctx):
     global board
     global game
+    global botIsPlayer
 
     await ctx.channel.send("```" + str(board) + "```")
     await ctx.channel.send("Game ended. Board is reset.")
 
     game = []
     board.reset()
+    botIsPlayer = False
 
 
 bot.run(TOKEN)

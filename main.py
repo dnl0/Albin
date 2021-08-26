@@ -19,6 +19,8 @@ async def start(ctx, user: discord.Member = None):
     global white_id
     global black_id
 
+    botIsPlayer = False
+
     bot_id = await bot.application_info()
     if not user:
         await ctx.channel.send("Tag a user to play.")
@@ -119,6 +121,7 @@ async def log(ctx):
     for i in range(len(game)):
         if i % 2:
             result += " " + game[i] + "\n"
+            continue
         else:
             result += str(n) + ". " + game[i]
 

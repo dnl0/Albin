@@ -68,7 +68,9 @@ async def move(ctx, arg):
             return
 
         if board.is_game_over():
-            await ctx.channel.send(board.outcome(claim_draw=True))
+            s = str(board.outcome(claim_draw=True).termination)
+            s = s.split(".")
+            await ctx.channel.send(s[-1])
             await end(ctx)
 
         elif board.is_check():

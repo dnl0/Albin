@@ -67,10 +67,11 @@ async def move(ctx, arg):
             await ctx.channel.send("Invalid move.")
             return
 
-        if board.is_game_over():
+        if board.outcome(claim_draw=True) != None:
             s = str(board.outcome(claim_draw=True).termination)
             s = s.split(".")
-            await ctx.channel.send(s[-1])
+
+            await ctx.channel.send(s[-1].replace("_", " "))
             await end(ctx)
 
         elif board.is_check():

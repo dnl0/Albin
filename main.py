@@ -1,4 +1,5 @@
 import chess
+import random
 import chess.engine
 import discord
 from discord.ext import commands
@@ -12,7 +13,7 @@ game = []
 
 
 @bot.command()
-async def start(ctx, user: discord.Member = None):
+async def start(ctx, user: discord.Member = None, variation: str = None):
     global board
     global botIsPlayer
     global isBoard
@@ -33,11 +34,19 @@ async def start(ctx, user: discord.Member = None):
     black_id = user.id
 
     isBoard = True
-    board = chess.Board()
-    msg = f"White: {ctx.message.author.mention}\nBlack: {user.mention}"
+
+    if not variation:
+        board = chess.Board()
+    elif variation == "960" or variation == "chess960":
+        r = random.randint(0, 959)
+        board = chess.Board().from_chess960_pos(r)
+        await ctx.channel.send(str(board))
+    else:
+        await ctx.channel.send("Unknown chess variant.")
+        return
 
     await ctx.channel.send("Board was created.")
-    await ctx.channel.send(msg)
+    await ctx.channel.send(f"White: {ctx.message.author.mention}\nBlack: {user.mention}")
 
 
 @start.error

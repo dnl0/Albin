@@ -40,7 +40,7 @@ async def start(ctx, user: discord.Member = None, variation: str = None):
     elif variation == "960" or variation == "chess960":
         r = random.randint(0, 959)
         board = chess.Board().from_chess960_pos(r)
-        await ctx.channel.send(str(board))
+        await ctx.channel.send("```" + str(board) + "```")
     else:
         await ctx.channel.send("Unknown chess variant.")
         return
